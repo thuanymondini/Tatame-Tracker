@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TechniqueCategorieController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', [TechniqueCategorieController::class, 'index']);
