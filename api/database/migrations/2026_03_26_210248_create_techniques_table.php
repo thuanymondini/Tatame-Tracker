@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name', 200)->unique()->comment('Name of the technique');
             $table->string('description', 400)->nullable()->comment('Description of the technique');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('technique_id')->nullable()->comment('Parent technique ID for hierarchical relationships');
+            $table->unsignedBigInteger('linked_technique')->nullable()->comment('Parent technique ID for hierarchical relationships');
 
             $table->foreign('category_id')->references('id')->on('technique_categories')->onDelete('cascade');
-            $table->foreign('technique_id')->references('id')->on('techniques')->onDelete('set null');
+            $table->foreign('linked_technique')->references('id')->on('techniques')->onDelete('set null');
         });
     }
 
