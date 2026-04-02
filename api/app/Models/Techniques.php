@@ -10,20 +10,29 @@ class Techniques extends Model
         "name",
         "description",
         "category_id",
-        "technique_id"
+        "linked_technique"
     ];
 
     public $timestamps = false;
 
     // Técnica pai
-    public function parentTechnique()
+    public function linkedTechnique()
     {
-        return $this->belongsTo(Techniques::class, 'technique_id');
+        return $this->belongsTo(Techniques::class, 'linked_technique');
     }
 
-    // Técnicas filhas
-    public function children()
+    public function category()
     {
-        return $this->hasMany(Techniques::class, 'technique_id');
+        return $this->belongsTo(TechniqueCategories::class, 'category_id');
+    }
+
+    public function dailyWorkouts()
+    {
+        return $this->belongsToMany(
+            DailyWorkouts::class,
+            'daily_workout_techniques',
+            'linked_technique',
+            'daily_workout_id'
+        );
     }
 }
