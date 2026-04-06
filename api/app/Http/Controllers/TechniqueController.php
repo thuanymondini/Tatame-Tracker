@@ -37,15 +37,12 @@ class TechniqueController extends Controller
     {
         $dto = TechniqueDTO::fromRequest($request);
 
-        $exists = Techniques::where('name', $dto->name)->exists();
-
-        if ($exists) {
-            return response()->json(['message' => 'Name already exists'], 409);
-        }
-
         $technique = Techniques::create($dto->toArray());
 
-        return response()->json($technique, 201);
+        return response()->json([
+            'message' => 'Técnica criada com sucesso!',
+            'created_id' => $technique->id,
+        ], 201);
     }
 
     public function update(TechniqueRequest $request, int $id): JsonResponse
@@ -58,15 +55,12 @@ class TechniqueController extends Controller
 
         $dto = TechniqueDTO::fromRequest($request);
 
-        $exists = Techniques::where('name', $dto->name)->where('id', '!=', $id)->exists();
-
-        if ($exists) {
-            return response()->json(['message' => 'Name already exists'], 409);
-        }
-
         $technique->update($dto->toArray());
 
-        return response()->json($technique);
+        return response()->json([
+            'message' => 'Técnica atualizada com sucesso!',
+            'updated_id' => $technique->id,
+        ]);
     }
 
     public function destroy(int $id): JsonResponse
@@ -79,7 +73,10 @@ class TechniqueController extends Controller
 
         $technique->delete();
 
-        return response()->json(['message' => 'Technique deleted successfully']);
+        return response()->json([
+            'message' => 'Técnica excluída com sucesso!',
+            'deleted_id' => $technique->id,
+        ]);
     }
 
     private function loadWithParents(?int $id = null, array $visited = []): Collection|Techniques|null
