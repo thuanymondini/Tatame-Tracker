@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\DailyWorkouts;
-use Illuminate\Http\Request;
+use App\DTOs\DailyWorkoutDTO;
+use App\Http\Requests\DailyWorkoutRequest;
 use Illuminate\Http\JsonResponse;
+use App\Http\Resources\DailyWorkoutResource;
+use App\Http\Controllers\TechniqueController;
 
 class DailyWorkoutController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json(DailyWorkouts::with('techniques')->get());
+        $dailyWorkouts = DailyWorkouts::with('techniques')->get();
+        return response()->json(DailyWorkoutResource::collection($dailyWorkouts));
     }
 
     public function show(int $id): JsonResponse
@@ -22,25 +26,63 @@ class DailyWorkoutController extends Controller
             return response()->json(['message' => 'Daily workout not found'], 404);
         }
 
-        return response()->json($dailyWorkout);
+        return response()->json(new DailyWorkoutResource($dailyWorkout));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(DailyWorkoutRequest $request): JsonResponse
     {
-        $validatedData = $request->validate([
-            'training_date'    => 'required|date|before_or_equal:today',
-            'observations'     => 'nullable|string|max:600',
-            'techniques'       => 'required|array|min:1',
-            'techniques.*'     => 'required|integer|exists:techniques,id',
-        ]);
+        $dto = DailyWorkoutDTO::fromRequest($request);
 
         $dailyWorkout = DailyWorkouts::create([
-            'training_date' => $validatedData['training_date'],
-            'observations'  => $validatedData['observations'] ?? null,
+            'training_date' => $dto->training_date,
+            'observations'  => $dto->observations,
         ]);
 
-        $dailyWorkout->techniques()->attach($validatedData['techniques']);
+        $dailyWorkout->techniques()->attach($dto->techniques);
 
-        return response()->json($dailyWorkout->load('techniques'), 201);
+        return response()->json([
+            'message' => 'Treino criado com sucesso!',
+            'created_id' => $dailyWorkout->id,
+        ], 201);
+    }
+
+    public function update(DailyWorkoutRequest $request, int $id): JsonResponse
+    {
+        $dailyWorkout = DailyWorkouts::find($id);
+
+        if (!$dailyWorkout) {
+            return response()->json(['message' => 'Daily workout not found'], 404);
+        }
+
+        // dailyWorkout->techniques() -> mantem as q ja tem
+        // dailyWorkout->techniques() -> apaga as que nao tem mais
+        // dailyWorkout->techniques() -> adiciona as novas
+        //
+        $dailyWorkout->techniques()->sync($request->input('techniques'));
+
+        $dto = DailyWorkoutDTO::fromRequest($request);
+
+        $dailyWorkout->update($dto->toArray());
+
+        return response()->json([
+            'message' => 'Treino atualizado com sucesso!',
+            'updated_id' => $dailyWorkout->id,
+        ]);
+    }
+
+    public function destroy(int $id): JsonResponse
+    {
+        $dailyWorkout = DailyWorkouts::find($id);
+
+        if (!$dailyWorkout) {
+            return response()->json(['message' => 'Daily workout not found'], 404);
+        }
+
+        $dailyWorkout->delete();
+
+        return response()->json([
+            'message' => 'Treino excluído com sucesso!',
+            'deleted_id' => $dailyWorkout->id,
+        ]);
     }
 }
