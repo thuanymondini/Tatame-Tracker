@@ -16,6 +16,8 @@ services:
       context: ./docker/php
     volumes:
       - ./api:/var/www/html
+    ports:
+    - "8080:80"
     depends_on:
       db:
         condition: service_healthy
