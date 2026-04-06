@@ -13,6 +13,11 @@ class DailyWorkouts extends Model
     ];
     public function techniques()
     {
-        return $this->belongsToMany(Techniques::class, 'daily_workout_techniques');
+        return $this->belongsToMany(
+            Techniques::class,
+            'daily_workout_techniques',
+            'daily_workout_id',   // FK deste model na pivot
+            'technique_id'        // FK do model Techniques na pivot
+        );
     }
 }
