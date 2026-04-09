@@ -13,7 +13,7 @@ export default function App() {
           <Route element={<Topbar/>}>
             <Route path="/" element={<Workouts />} />
             <Route path="/technique" element={<Techniques />} />
-            <Route path="/techniqueCategory" element={<TechniqueCategories />} />
+            <Route path="/techniqueCategory" element={<TechniqueCategories/>} />
           </Route>
           {/* <Route path="/" element={<Dashboard />} /> */}
 
