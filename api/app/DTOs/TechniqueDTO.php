@@ -8,7 +8,7 @@ class TechniqueDTO
 {
     public function __construct(
         public readonly string $name,
-        public readonly string $description,
+        public readonly ?string $description,
         public readonly int    $category_id,
         public readonly ?int   $linked_technique = null,
     ) {}
