@@ -19,12 +19,14 @@ interface TechniqueCategoryModalProps {
   onSuccess?: (data: { name: string; description: string }) => void;
   category?: TechniqueCategory,
   trigger?: React.ReactNode;
+  onReloadRequested: () => void;
 }
 
 export function TechniqueCategoryModal({
   onSuccess,
   category,
   trigger,
+  onReloadRequested,
 }: TechniqueCategoryModalProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(category?.name ?? "");
@@ -36,6 +38,13 @@ export function TechniqueCategoryModal({
     setLoading(true);
 
     try {
+
+      const isFormValid = await validateForm();
+      if (!isFormValid) {
+          setLoading(false);
+          return;
+      }
+
       if (category?.id) {
             await editTechniqueCategory({id: category.id, name, description})
       } else {
@@ -47,6 +56,7 @@ export function TechniqueCategoryModal({
       setName("");
       setDescription("");
       toast.success(category ? "Categoria Editada com sucesso!" : "Categoria criada com sucesso!")
+      onReloadRequested();
     } catch {
       toast.error(category ? "Não foi possível editar a categoria!" : "Não foi possível criar a categoria!")
       setOpen(false);
@@ -55,6 +65,14 @@ export function TechniqueCategoryModal({
     } finally {
       setLoading(false);
     }
+  }
+
+  async function validateForm() {
+    if (!name) {
+      toast.error("O nome da categoria de técnica é obrigatório!");
+      return false;
+    }
+    return true;
   }
 
   return (
@@ -76,7 +94,6 @@ export function TechniqueCategoryModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ex: Cardio"
-              required
             />
           </div>
           <div className="space-y-1">

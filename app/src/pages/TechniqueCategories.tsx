@@ -10,11 +10,15 @@ export function TechniqueCategories() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchTechniqueCategories()
+  const loadTechniqueCategories = () => {
+      fetchTechniqueCategories()
       .then((data) => setCategories(data))
       .catch(() => setError("Erro ao carregar categorias"))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+  loadTechniqueCategories();
   }, []);
   if (loading) return <p>Carregando...</p>;
   if (error) return <p>{error}</p>;
@@ -23,10 +27,7 @@ export function TechniqueCategories() {
     <div>
       <div className="flex flex-wrap items-center gap-2 md:flex-row p-6">
         <TechniqueCategoryModal
-          onSuccess={() => {
-            // atualiza a lista localmente ou refaz o fetch
-            fetchTechniqueCategories().then(setCategories);
-          }}
+          onReloadRequested={() => {loadTechniqueCategories()}}
         />
         <Toaster />
       </div>
@@ -36,6 +37,7 @@ export function TechniqueCategories() {
             id={category.id}
             name={category.name}
             description={category.description}
+            onReloadRequested={() => {loadTechniqueCategories()}}
           />
         ))}
       </div>
