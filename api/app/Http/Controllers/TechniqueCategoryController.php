@@ -59,7 +59,7 @@ class TechniqueCategoryController extends Controller
 
         $exists = TechniqueCategories::where('name', $dto->name)->exists();
 
-        if ($exists) {
+        if ($exists && $category->name !== $dto->name) {
             return response()->json(['message' => 'Name already exists'], 409);
         }
 
