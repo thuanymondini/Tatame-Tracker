@@ -1,4 +1,4 @@
-# Cine Catálogo
+# Tatame Tracker
 
 Projeto full-stack de treinos de jiu-jitsu desenvolvido com Laravel (backend) e ReactJS (frontend), com a biblioteca shadcn.
 
