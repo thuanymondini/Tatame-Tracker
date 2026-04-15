@@ -96,8 +96,11 @@ export function TechniqueModal({
       if(open) {
         setCategoryId(technique?.category?.id.toString() ?? "");
         setLinkedTechnique(technique?.linked_technique?.id.toString() ?? "Nenhuma");
+        setName(technique?.name ?? "");
+        setDescription(technique?.description ?? "");
       }
     }, [open]);
+
     if (loading) return <p>Carregando...</p>;
     if (error) return <p>{error}</p>;
 

@@ -1,5 +1,5 @@
 // components/TechniqueCategoryModal.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -32,6 +32,13 @@ export function TechniqueCategoryModal({
   const [name, setName] = useState(category?.name ?? "");
   const [description, setDescription] = useState(category?.description ?? "");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if(open) {
+      setName(category?.name ?? "");
+      setDescription(category?.description ?? "");
+    }
+  }, [open]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
