@@ -34,3 +34,14 @@ RUN { \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+
+# Copia apenas os arquivos de dependência primeiro (melhor uso do cache do Docker)
+COPY composer.json composer.lock ./
+
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+
+# Copia o restante do código
+COPY . .
+
+# Gera o autoloader otimizado com o código completo presente
+RUN composer dump-autoload --optimize --no-dev

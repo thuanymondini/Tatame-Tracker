@@ -15,6 +15,7 @@ cd TatameTrack
 O sistema é feito com docker e docker compose, portanto para subi-lo basta rodar:
 
 ```bash
+cp api/.env.example api/.env
 docker-compose up -d
 ```
 
@@ -22,6 +23,8 @@ docker-compose up -d
 Por padrão o sistema tem algumas categorias, após iniciá-lo deve-se semear o banco de dados com:
 
 ```bash
+docker-compose exec php php artisan optimize
+docker-compose exec php php artisan migrate
 docker-compose exec php php artisan db:seed
 ```
 

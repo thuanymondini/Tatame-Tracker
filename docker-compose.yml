@@ -15,11 +15,13 @@ services:
 
   php:
     build:
-      context: ./docker/php
+      context: ./api
+      dockerfile: ../docker/php/Dockerfile
     volumes:
       - ./api:/var/www/html
+      - vendor:/var/www/html/vendor
     ports:
-    - "8080:80"
+      - "8080:80"
     depends_on:
       db:
         condition: service_healthy
@@ -48,6 +50,7 @@ services:
 
 volumes:
   db-data:
+  vendor:
 
 networks:
   app-network:
