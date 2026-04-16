@@ -22,7 +22,7 @@ docker-compose up -d
 Por padrão o sistema tem algumas categorias, após iniciá-lo deve-se semear o banco de dados com:
 
 ```bash
-docker-compose exec php artisan db:seed
+docker-compose exec php php artisan db:seed
 ```
 
 ### 4. Para desenvolvimento
