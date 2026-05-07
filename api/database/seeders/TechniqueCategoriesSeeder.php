@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\TechniqueCategories;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class TechniqueCategoriesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
+        $user = User::where('email', 'demo@tatame.com')->firstOrFail();
+
         $registros = [
             ['name' => 'Guarda', 'description' => 'Técnicas de guarda, onde o praticante está de costas para o chão e controla o adversário com as pernas.'],
             ['name' => 'Passagem de Guarda', 'description' => 'Técnicas de passagem de guarda, onde o praticante tenta passar as pernas do adversário para alcançar uma posição dominante.'],
@@ -19,7 +19,10 @@ class TechniqueCategoriesSeeder extends Seeder
         ];
 
         foreach ($registros as $registro) {
-            TechniqueCategories::firstOrCreate($registro);
+            TechniqueCategories::firstOrCreate(
+                ['user_id' => $user->id, 'name' => $registro['name']],
+                ['description' => $registro['description']]
+            );
         }
     }
 }
