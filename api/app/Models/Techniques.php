@@ -7,15 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class Techniques extends Model
 {
     protected $fillable = [
-        "name",
-        "description",
-        "category_id",
-        "linked_technique"
+        'user_id',
+        'name',
+        'description',
+        'category_id',
+        'linked_technique',
     ];
 
     public $timestamps = false;
 
-    // Técnica pai
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function linkedTechnique()
     {
         return $this->belongsTo(Techniques::class, 'linked_technique');
@@ -31,7 +36,7 @@ class Techniques extends Model
         return $this->belongsToMany(
             DailyWorkouts::class,
             'daily_workout_techniques',
-            'linked_technique',
+            'technique_id',
             'daily_workout_id'
         );
     }

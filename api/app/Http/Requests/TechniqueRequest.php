@@ -9,15 +9,21 @@ class TechniqueRequest extends FormRequest
 {
     public function rules(): array
     {
-        $id = $this->route('id');
+        $id     = $this->route('id');
+        $userId = auth()->id();
 
         return [
-            'name'             => 'required|string|max:100',
-            'description'      => 'nullable|string|max:400',
-            'category_id'      => 'required|exists:technique_categories,id',
+            'name'        => 'required|string|max:100',
+            'description' => 'nullable|string|max:400',
+
+            'category_id' => [
+                'required',
+                Rule::exists('technique_categories', 'id')->where('user_id', $userId),
+            ],
+
             'linked_technique' => [
                 'nullable',
-                'exists:techniques,id',
+                Rule::exists('techniques', 'id')->where('user_id', $userId),
                 Rule::notIn([$id]),
             ],
         ];
