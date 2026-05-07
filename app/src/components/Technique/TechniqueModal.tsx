@@ -90,6 +90,8 @@ export function TechniqueModal({
         .then((data) => setTechniques(data))
         .catch(() => setError("Erro ao carregar técnicas"))
         .finally(() => setLoading(false));
+
+        console.log("Técnicas: ", techniques);
     }, []);
 
   useEffect(() => {
