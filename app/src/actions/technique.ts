@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "@/lib/api"
 
 export const fetchTechniques = async () => {
   try {

@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "@/lib/api"
 
 export const fetchTechniqueCategories = async () => {
   try {
@@ -15,6 +15,7 @@ export const createTechniqueCategory = async (data: {
   description?: string;
 }) => {
   try {
+    console.log('Creating technique category with data:', data);
     const response = await axios.post('/api/techniqueCategory', data);
     return response.data;
   } catch (error) {
