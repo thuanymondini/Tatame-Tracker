@@ -3,7 +3,7 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: docker/nginx/Dockerfile
+      dockerfile: Docker/nginx/Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -14,7 +14,7 @@ services:
 
   php:
     build:
-      context: ./docker/php
+      context: ./Docker/php
     volumes:
       - ./api:/var/www/html
     ports:

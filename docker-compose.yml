@@ -1,13 +1,13 @@
 services:
   nginx:
     build:
-      context: ./docker/nginx
+      context: ./Docker/nginx
       dockerfile: Dockerfile.dev
     ports:
       - "80:80"
     volumes:
       - ./api:/var/www/html
-      - ./docker/nginx/default.conf.dev:/etc/nginx/conf.d/default.conf
+      - ./Docker/nginx/default.conf.dev:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
     networks:
@@ -16,7 +16,7 @@ services:
   php:
     build:
       context: ./api
-      dockerfile: ../docker/php/Dockerfile
+      dockerfile: ../Docker/php/Dockerfile
     volumes:
       - ./api:/var/www/html
       - vendor:/var/www/html/vendor
